@@ -2,8 +2,7 @@
 Realtime multiplayer game mode for Turnbase RPG template
 
 ## Development plan
-- May uses Node JS for server-side development (have to test client-side compatibility)
-- Socket.IO client -> https://github.com/doghappy/socket.io-client-csharp (have to test Unity compatibility)
+- Uses [Colyseus](https://www.colyseus.io/) for room creation, match making, and turnbase battle
 - Add match making UIs
 - Implement realtime battle
 
