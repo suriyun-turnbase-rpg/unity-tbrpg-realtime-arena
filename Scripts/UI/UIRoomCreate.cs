@@ -22,7 +22,7 @@ namespace RealtimeArena.UI
             {
                 inputPassword.inputType = InputField.InputType.Password;
                 inputPassword.contentType = InputField.ContentType.Pin;
-                inputPassword.characterLimit = LobbyRoomState.MAX_PASSWORD_LENGTH;
+                inputPassword.characterLimit = LobbyRoomConsts.MAX_PASSWORD_LENGTH;
             }
         }
 
@@ -35,9 +35,9 @@ namespace RealtimeArena.UI
         {
             Dictionary<string, object> options = new Dictionary<string, object>();
             if (inputTitle && !string.IsNullOrEmpty(inputTitle.text))
-                options[LobbyRoomState.ROOM_NAME] = inputTitle.text;
+                options[LobbyRoomConsts.ROOM_NAME] = inputTitle.text;
             if (inputPassword && !string.IsNullOrEmpty(inputPassword.text))
-                options[LobbyRoomState.ROOM_NAME] = inputPassword.text;
+                options[LobbyRoomConsts.ROOM_NAME] = inputPassword.text;
 
             try
             {

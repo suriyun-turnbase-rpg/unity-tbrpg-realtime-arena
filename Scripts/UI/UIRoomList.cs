@@ -17,7 +17,7 @@ namespace RealtimeArena.UI
         public async void LoadAvailableLobby()
         {
             entryContainer.RemoveAllChildren();
-            LoobyRoomAvailable[] rooms = await RealtimeArenaManager.Client.GetAvailableRooms<LoobyRoomAvailable>(LobbyRoomState.ROOM_NAME);
+            LoobyRoomAvailable[] rooms = await RealtimeArenaManager.Client.GetAvailableRooms<LoobyRoomAvailable>(LobbyRoomConsts.ROOM_NAME);
             for (int i = 0; i < rooms.Length; ++i)
             {
                 UIRoomListEntry newRoomUI = Instantiate(entryPrefab, entryContainer);
