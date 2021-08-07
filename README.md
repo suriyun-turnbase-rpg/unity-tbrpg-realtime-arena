@@ -3,8 +3,11 @@ Realtime multiplayer game mode for Turnbase RPG template
 
 ## Development plan
 - Uses [Colyseus](https://www.colyseus.io/) for room creation, match making, and turnbase battle
-- Add match making UIs
+- For the early access version, it will not have match making yet (no button which press then random player to battle) but it will have room creation, room list and joining.
+- Add room list, room creation and joining UIs
 - Implement realtime battle
+- Develop match making system after realtime battle is implemented
+- Add match making UIs
 
 ## Workflow
 - Players start match making with ID and token as a payload
