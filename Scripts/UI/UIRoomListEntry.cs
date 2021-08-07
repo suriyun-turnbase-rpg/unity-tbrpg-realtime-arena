@@ -1,8 +1,5 @@
 ﻿using Colyseus;
 using RealtimeArena.Room;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 
 namespace RealtimeArena.UI
