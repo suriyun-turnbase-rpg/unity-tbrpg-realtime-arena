@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Colyseus;
 using RealtimeArena.Room;
+using RealtimeArena.Event;
+using UnityEngine.Events;
 
 namespace RealtimeArena
 {
@@ -13,6 +15,8 @@ namespace RealtimeArena
         public static ColyseusRoom<LobbyRoomState> CurrentLobby { get; set; }
 
         public string serverAddress = "ws://localhost:2567";
+        public UnityEvent onJoinLobby = new UnityEvent();
+        public StringEvent onJoinLobbyFailed = new StringEvent();
 
         private void Awake()
         {
@@ -33,11 +37,13 @@ namespace RealtimeArena
         public void OnJoinLobby(ColyseusRoom<LobbyRoomState> room)
         {
             CurrentLobby = room;
+            onJoinLobby.Invoke();
         }
 
         public void OnJoinLobbyFailed(string message)
         {
             Debug.LogError($"Join Lobby Failed: {message}");
+            onJoinLobbyFailed.Invoke(message);
         }
     }
 }
