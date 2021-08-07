@@ -28,8 +28,10 @@ namespace RealtimeArena.UI
             }
         }
 
-        public void ShowUIRoomPassword()
+        public void ShowUIRoomPassword(string roomId, string roomTitle)
         {
+            uiRoomPassword.RoomId = roomId;
+            uiRoomPassword.RoomTitle = roomTitle;
             uiRoomPassword.Show();
         }
     }

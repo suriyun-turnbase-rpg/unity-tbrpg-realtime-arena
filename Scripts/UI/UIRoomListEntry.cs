@@ -11,7 +11,6 @@ namespace RealtimeArena.UI
     {
         public UIRoomList uiRoomList;
         public Text textTitle;
-        public InputField inputPassword;
 
         public string RoomId { get; set; }
         public bool HasPassword { get; set; }
@@ -32,7 +31,7 @@ namespace RealtimeArena.UI
         {
             // Show room password UI if the room password is required
             if (HasPassword)
-                uiRoomList.ShowUIRoomPassword();
+                uiRoomList.ShowUIRoomPassword(RoomId, RoomTitle);
             else
                 Join();
         }
