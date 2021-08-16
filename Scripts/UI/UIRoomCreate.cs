@@ -35,9 +35,9 @@ namespace RealtimeArena.UI
         {
             Dictionary<string, object> options = new Dictionary<string, object>();
             if (inputTitle && !string.IsNullOrEmpty(inputTitle.text))
-                options[LobbyRoomConsts.ROOM_NAME] = inputTitle.text;
+                options[LobbyRoomConsts.OPTION_TITLE] = inputTitle.text;
             if (inputPassword && !string.IsNullOrEmpty(inputPassword.text))
-                options[LobbyRoomConsts.ROOM_NAME] = inputPassword.text;
+                options[LobbyRoomConsts.OPTION_PASSWORD] = inputPassword.text;
 
             try
             {
