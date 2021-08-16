@@ -3,23 +3,14 @@
 namespace RealtimeArena.Room
 {
     public class LobbyRoomState : Schema
-    {
-        [Type(0, "string")]
-        public string playerName = default(string);
+	{
+		[Type(0, "map", typeof(MapSchema<LobbyPlayer>))]
+		public MapSchema<LobbyPlayer> players = new MapSchema<LobbyPlayer>();
 
-        [Type(1, "int32")]
-        public int playerLevel = default(int);
+		[Type(1, "string")]
+		public string title = default(string);
 
-        [Type(2, "int32")]
-        public int teamBP = default(int);
-
-        [Type(3, "string")]
-        public string leaderCharacterId = default(string);
-
-        [Type(4, "int32")]
-        public int leaderCharacterLevel = default(int);
-
-        [Type(5, "boolean")]
-        public bool isReady = default(bool);
-    }
+		[Type(2, "boolean")]
+		public bool hasPassword = default(bool);
+	}
 }
