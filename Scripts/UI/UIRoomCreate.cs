@@ -41,7 +41,7 @@ namespace RealtimeArena.UI
 
             try
             {
-                ColyseusRoom<LobbyRoomState> room = await RealtimeArenaManager.Client.Create<LobbyRoomState>("lobby", options);
+                ColyseusRoom<LobbyRoomState> room = await RealtimeArenaManager.Client.Create<LobbyRoomState>(LobbyRoomConsts.ROOM_NAME, options);
                 RealtimeArenaManager.Instance.OnJoinLobby(room);
             }
             catch (System.Exception ex)
