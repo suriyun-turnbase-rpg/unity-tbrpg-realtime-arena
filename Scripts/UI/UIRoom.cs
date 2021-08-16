@@ -1,4 +1,5 @@
 ﻿using RealtimeArena.Room;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,23 +9,15 @@ namespace RealtimeArena.UI
     {
         public UIRoomPlayer playerPrefab;
         public Transform playerContainer;
-        public Text textTitle;
-        public bool IsReady { get; set; }
+        public Text textCountDown;
+        public bool IsStarting { get; set; }
 
-        private string _roomTitle;
-        public string RoomTitle
-        {
-            get { return _roomTitle; }
-            set
-            {
-                _roomTitle = value;
-                if (textTitle)
-                    textTitle.text = value;
-            }
-        }
+        private Coroutine countDownCoroutine = null;
 
         private void OnEnable()
         {
+            if (textCountDown)
+                textCountDown.text = string.Empty;
             RealtimeArenaManager.Instance.onLobbyError.AddListener(OnError);
             RealtimeArenaManager.Instance.onLobbyStateChange.AddListener(OnStateChange);
             RealtimeArenaManager.Instance.onLobbyLeave.AddListener(OnLeave);
@@ -46,6 +39,34 @@ namespace RealtimeArena.UI
         private void OnStateChange(LobbyRoomState state, bool isFirstState)
         {
             UpdateRoomState(state);
+            if (state.isStarting != IsStarting)
+            {
+                IsStarting = state.isStarting;
+                if (countDownCoroutine != null)
+                {
+                    StopCoroutine(countDownCoroutine);
+                    countDownCoroutine = null;
+                }
+                if (textCountDown)
+                    textCountDown.text = string.Empty;
+                if (IsStarting)
+                    countDownCoroutine = StartCoroutine(CountDownRoutine());
+            }
+        }
+
+        private IEnumerator CountDownRoutine()
+        {
+            int countDown = 5;
+            do
+            {
+                if (textCountDown)
+                    textCountDown.text = countDown.ToString();
+                yield return new WaitForSeconds(1);
+                countDown--;
+            }
+            while (countDown > 0);
+            if (textCountDown)
+                textCountDown.text = string.Empty;
         }
 
         private void OnLeave(int code)

@@ -6,5 +6,8 @@ namespace RealtimeArena.Room
 	{
 		[Type(0, "map", typeof(MapSchema<LobbyPlayer>))]
 		public MapSchema<LobbyPlayer> players = new MapSchema<LobbyPlayer>();
+
+		[Type(1, "boolean")]
+		public bool isStarting = default(bool);
 	}
 }
