@@ -3031,7 +3031,18 @@ MonoBehaviour:
       m_Calls: []
   eventHide:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 997841655}
+        m_MethodName: LoadAvailableLobby
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   inputTitle: {fileID: 1979138717}
   inputPassword: {fileID: 1758475230}
 --- !u!114 &1445493545
@@ -3592,7 +3603,18 @@ MonoBehaviour:
       m_Calls: []
   eventHide:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 997841655}
+        m_MethodName: LoadAvailableLobby
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   textTitle: {fileID: 0}
   inputPassword: {fileID: 475945799}
 --- !u!114 &1727297452
