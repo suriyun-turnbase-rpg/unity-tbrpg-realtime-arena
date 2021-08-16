@@ -12,7 +12,7 @@ namespace RealtimeArena.UI
 
         private void Start()
         {
-            LoadAvailableLobby(1);
+            LoadAvailableLobby(1000);
         }
 
         public async void LoadAvailableLobby(int milliseondsDelay)
