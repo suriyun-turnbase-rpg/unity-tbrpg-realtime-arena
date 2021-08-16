@@ -3,6 +3,7 @@ using Colyseus;
 using RealtimeArena.Room;
 using RealtimeArena.Event;
 using UnityEngine.Events;
+using LobbyEvent = RealtimeArena.Event.Lobby;
 
 namespace RealtimeArena
 {
@@ -15,6 +16,9 @@ namespace RealtimeArena
         public string serverAddress = "ws://localhost:2567";
         public UnityEvent onJoinLobby = new UnityEvent();
         public StringEvent onJoinLobbyFailed = new StringEvent();
+        public RoomErrorEvent onLobbyError = new RoomErrorEvent();
+        public RoomLeaveEvent onLobbyLeave = new RoomLeaveEvent();
+        public LobbyEvent.LobbyStateChangeEvent onLobbyStateChange = new LobbyEvent.LobbyStateChangeEvent();
 
         private void Awake()
         {
@@ -35,7 +39,25 @@ namespace RealtimeArena
         public void OnJoinLobby(ColyseusRoom<LobbyRoomState> room)
         {
             CurrentLobby = room;
+            CurrentLobby.OnError += CurrentLobby_OnError;
+            CurrentLobby.OnStateChange += CurrentLobby_OnStateChange;
+            CurrentLobby.OnLeave += CurrentLobby_OnLeave;
             onJoinLobby.Invoke();
+        }
+
+        private void CurrentLobby_OnError(int code, string message)
+        {
+            onLobbyError.Invoke(code, message);
+        }
+
+        private void CurrentLobby_OnStateChange(LobbyRoomState state, bool isFirstState)
+        {
+            onLobbyStateChange.Invoke(state, isFirstState);
+        }
+
+        private void CurrentLobby_OnLeave(int code)
+        {
+            onLobbyLeave.Invoke(code);
         }
 
         public void OnJoinLobbyFailed(string message)
