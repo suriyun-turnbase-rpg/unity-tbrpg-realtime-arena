@@ -1,4 +1,5 @@
 ﻿using RealtimeArena.Room;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace RealtimeArena.UI
@@ -9,13 +10,14 @@ namespace RealtimeArena.UI
         public Transform entryContainer;
         public UIRoomPassword uiRoomPassword;
 
-        private void OnEnable()
+        private void Start()
         {
-            LoadAvailableLobby();
+            LoadAvailableLobby(1);
         }
 
-        public async void LoadAvailableLobby()
+        public async void LoadAvailableLobby(int milliseondsDelay)
         {
+            await Task.Delay(milliseondsDelay);
             entryContainer.RemoveAllChildren();
             LoobyRoomAvailable[] rooms = await RealtimeArenaManager.Client.GetAvailableRooms<LoobyRoomAvailable>(LobbyRoomConsts.ROOM_NAME);
             for (int i = 0; i < rooms.Length; ++i)
