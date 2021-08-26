@@ -11,14 +11,15 @@ namespace RealtimeArena
     {
         public static RealtimeArenaManager Instance { get; private set; }
         public static ColyseusClient Client { get; private set; }
-        public static ColyseusRoom<GameRoomState> CurrentLobby { get; set; }
+        public static ColyseusRoom<GameRoomState> CurrentRoom { get; set; }
 
         public string serverAddress = "ws://localhost:2567";
+        public string battleScene = "OnlineBattleScene";
         public UnityEvent onJoinLobby = new UnityEvent();
         public StringEvent onJoinLobbyFailed = new StringEvent();
-        public RoomErrorEvent onLobbyError = new RoomErrorEvent();
-        public RoomLeaveEvent onLobbyLeave = new RoomLeaveEvent();
-        public LobbyEvent.LobbyStateChangeEvent onLobbyStateChange = new LobbyEvent.LobbyStateChangeEvent();
+        public RoomErrorEvent onRoomError = new RoomErrorEvent();
+        public RoomLeaveEvent onRoomLeave = new RoomLeaveEvent();
+        public LobbyEvent.LobbyStateChangeEvent onRoomStateChange = new LobbyEvent.LobbyStateChangeEvent();
 
         private void Awake()
         {
@@ -38,32 +39,37 @@ namespace RealtimeArena
 
         public void OnJoinLobby(ColyseusRoom<GameRoomState> room)
         {
-            CurrentLobby = room;
-            CurrentLobby.OnError += CurrentLobby_OnError;
-            CurrentLobby.OnStateChange += CurrentLobby_OnStateChange;
-            CurrentLobby.OnLeave += CurrentLobby_OnLeave;
+            CurrentRoom = room;
+            CurrentRoom.OnError += CurrentRoom_OnError;
+            CurrentRoom.OnStateChange += CurrentRoom_OnStateChange;
+            CurrentRoom.OnLeave += CurrentRoom_OnLeave;
             onJoinLobby.Invoke();
         }
 
-        private void CurrentLobby_OnError(int code, string message)
+        private void CurrentRoom_OnError(int code, string message)
         {
-            onLobbyError.Invoke(code, message);
+            onRoomError.Invoke(code, message);
         }
 
-        private void CurrentLobby_OnStateChange(GameRoomState state, bool isFirstState)
+        private void CurrentRoom_OnStateChange(GameRoomState state, bool isFirstState)
         {
-            onLobbyStateChange.Invoke(state, isFirstState);
+            onRoomStateChange.Invoke(state, isFirstState);
         }
 
-        private void CurrentLobby_OnLeave(int code)
+        private void CurrentRoom_OnLeave(int code)
         {
-            onLobbyLeave.Invoke(code);
+            onRoomLeave.Invoke(code);
         }
 
         public void OnJoinLobbyFailed(string message)
         {
             Debug.LogError($"Join Lobby Failed: {message}");
             onJoinLobbyFailed.Invoke(message);
+        }
+
+        public void LoadBattleScene(bool loadIfNotLoaded = false)
+        {
+            GameInstance.Singleton.LoadSceneIfNotLoaded(battleScene, loadIfNotLoaded);
         }
     }
 }

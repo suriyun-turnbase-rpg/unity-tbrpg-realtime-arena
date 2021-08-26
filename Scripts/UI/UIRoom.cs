@@ -11,8 +11,6 @@ namespace RealtimeArena.UI
         public UIRoomPlayer playerPrefab;
         public Transform playerContainer;
         public Text textCountDown;
-        public bool IsStarting { get; private set; }
-        public ERoomState CurrentRoomState { get; private set; } = ERoomState.WaitPlayersToReady;
 
         private Coroutine countDownCoroutine = null;
 
@@ -20,17 +18,17 @@ namespace RealtimeArena.UI
         {
             if (textCountDown)
                 textCountDown.text = string.Empty;
-            RealtimeArenaManager.Instance.onLobbyError.AddListener(OnError);
-            RealtimeArenaManager.Instance.onLobbyStateChange.AddListener(OnStateChange);
-            RealtimeArenaManager.Instance.onLobbyLeave.AddListener(OnLeave);
-            UpdateRoomState(RealtimeArenaManager.CurrentLobby.State);
+            RealtimeArenaManager.Instance.onRoomError.AddListener(OnError);
+            RealtimeArenaManager.Instance.onRoomStateChange.AddListener(OnStateChange);
+            RealtimeArenaManager.Instance.onRoomLeave.AddListener(OnLeave);
+            UpdateRoomState(RealtimeArenaManager.CurrentRoom.State);
         }
 
         private void OnDisable()
         {
-            RealtimeArenaManager.Instance.onLobbyError.RemoveListener(OnError);
-            RealtimeArenaManager.Instance.onLobbyStateChange.RemoveListener(OnStateChange);
-            RealtimeArenaManager.Instance.onLobbyLeave.RemoveListener(OnLeave);
+            RealtimeArenaManager.Instance.onRoomError.RemoveListener(OnError);
+            RealtimeArenaManager.Instance.onRoomStateChange.RemoveListener(OnStateChange);
+            RealtimeArenaManager.Instance.onRoomLeave.RemoveListener(OnLeave);
         }
 
         private void OnError(int code, string message)
@@ -41,19 +39,23 @@ namespace RealtimeArena.UI
         private void OnStateChange(GameRoomState state, bool isFirstState)
         {
             UpdateRoomState(state);
-            if (state.state != (byte)CurrentRoomState)
+            if (textCountDown)
+                textCountDown.text = string.Empty;
+            if (countDownCoroutine != null)
             {
-                CurrentRoomState = (ERoomState)state.state;
-                IsStarting = state.state >= (byte)ERoomState.CountDownToStartGame;
-                if (countDownCoroutine != null)
-                {
-                    StopCoroutine(countDownCoroutine);
-                    countDownCoroutine = null;
-                }
-                if (textCountDown)
-                    textCountDown.text = string.Empty;
-                if (IsStarting)
+                StopCoroutine(countDownCoroutine);
+                countDownCoroutine = null;
+            }
+            switch ((ERoomState)state.state)
+            {
+                case ERoomState.CountDownToStartGame:
+                    // Count down before enter game
                     countDownCoroutine = StartCoroutine(CountDownRoutine());
+                    break;
+                case ERoomState.WaitPlayersToEnterGame:
+                    // Load battle scene to enter game
+                    RealtimeArenaManager.Instance.LoadBattleScene();
+                    break;
             }
         }
 
@@ -96,7 +98,7 @@ namespace RealtimeArena.UI
         private async void OnClickReadyRoutine()
         {
             // NOTE: If 2 players click ready it will start game.
-            await RealtimeArenaManager.CurrentLobby.Send("ready");
+            await RealtimeArenaManager.CurrentRoom.Send("ready");
         }
     }
 }
