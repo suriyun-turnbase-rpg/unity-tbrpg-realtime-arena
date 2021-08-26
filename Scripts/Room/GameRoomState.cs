@@ -7,7 +7,7 @@ namespace RealtimeArena.Room
 		[Type(0, "map", typeof(MapSchema<GamePlayer>))]
 		public MapSchema<GamePlayer> players = new MapSchema<GamePlayer>();
 
-		[Type(1, "boolean")]
-		public bool isStarting = default(bool);
+		[Type(1, "uint8")]
+		public byte state = 0;
 	}
 }

@@ -1,5 +1,5 @@
 ﻿using RealtimeArena.Room;
-using System.Collections.Generic;
+using RealtimeArena.Enums;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,7 +23,7 @@ namespace RealtimeArena.UI
                 PlayerName = value.playerName;
                 PlayerLevel = value.playerLevel;
                 TeamBP = value.teamBP;
-                IsReady = value.isReady;
+                IsReady = value.state >= (byte)EPlayerState.Ready;
             }
         }
 

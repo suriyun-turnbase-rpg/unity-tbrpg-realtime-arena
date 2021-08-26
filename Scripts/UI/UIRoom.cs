@@ -1,4 +1,5 @@
 ﻿using RealtimeArena.Room;
+using RealtimeArena.Enums;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +11,8 @@ namespace RealtimeArena.UI
         public UIRoomPlayer playerPrefab;
         public Transform playerContainer;
         public Text textCountDown;
-        public bool IsStarting { get; set; }
+        public bool IsStarting { get; private set; }
+        public ERoomState CurrentRoomState { get; private set; } = ERoomState.WaitPlayersToReady;
 
         private Coroutine countDownCoroutine = null;
 
@@ -39,9 +41,10 @@ namespace RealtimeArena.UI
         private void OnStateChange(GameRoomState state, bool isFirstState)
         {
             UpdateRoomState(state);
-            if (state.isStarting != IsStarting)
+            if (state.state != (byte)CurrentRoomState)
             {
-                IsStarting = state.isStarting;
+                CurrentRoomState = (ERoomState)state.state;
+                IsStarting = state.state >= (byte)ERoomState.CountDownToStartGame;
                 if (countDownCoroutine != null)
                 {
                     StopCoroutine(countDownCoroutine);
@@ -56,7 +59,7 @@ namespace RealtimeArena.UI
 
         private IEnumerator CountDownRoutine()
         {
-            int countDown = 5;
+            int countDown = GameRoomConsts.ENTER_GAME_COUNT_DOWN;
             do
             {
                 if (textCountDown)

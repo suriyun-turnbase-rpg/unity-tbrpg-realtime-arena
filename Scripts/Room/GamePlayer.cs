@@ -19,7 +19,7 @@ namespace RealtimeArena.Room
 		[Type(4, "int32")]
 		public int leaderCharacterLevel = default(int);
 
-		[Type(5, "boolean")]
-		public bool isReady = default(bool);
+		[Type(5, "uint8")]
+		public byte state = 0;
 	}
 }
