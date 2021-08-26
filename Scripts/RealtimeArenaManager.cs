@@ -19,6 +19,7 @@ namespace RealtimeArena
         public StringEvent onJoinLobbyFailed = new StringEvent();
         public RoomErrorEvent onRoomError = new RoomErrorEvent();
         public RoomLeaveEvent onRoomLeave = new RoomLeaveEvent();
+        public StringEvent onPlayerLeave = new StringEvent();
         public LobbyEvent.LobbyStateChangeEvent onRoomStateChange = new LobbyEvent.LobbyStateChangeEvent();
 
         private void Awake()
@@ -43,6 +44,7 @@ namespace RealtimeArena
             CurrentRoom.OnError += CurrentRoom_OnError;
             CurrentRoom.OnStateChange += CurrentRoom_OnStateChange;
             CurrentRoom.OnLeave += CurrentRoom_OnLeave;
+            CurrentRoom.OnMessage<string>("playerLeave", CurrentRoom_OnPlayerLeave);
             onJoinLobby.Invoke();
         }
 
@@ -59,6 +61,11 @@ namespace RealtimeArena
         private void CurrentRoom_OnLeave(int code)
         {
             onRoomLeave.Invoke(code);
+        }
+
+        private void CurrentRoom_OnPlayerLeave(string sessionId)
+        {
+            onPlayerLeave.Invoke(sessionId);
         }
 
         public void OnJoinLobbyFailed(string message)

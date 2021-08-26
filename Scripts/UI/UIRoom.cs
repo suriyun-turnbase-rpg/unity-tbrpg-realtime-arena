@@ -3,6 +3,7 @@ using RealtimeArena.Enums;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 namespace RealtimeArena.UI
 {
@@ -13,6 +14,7 @@ namespace RealtimeArena.UI
         public Text textCountDown;
 
         private Coroutine countDownCoroutine = null;
+        private readonly Dictionary<string, UIRoomPlayer> uiRoomPlayers = new Dictionary<string, UIRoomPlayer>();
 
         private void OnEnable()
         {
@@ -82,11 +84,13 @@ namespace RealtimeArena.UI
         private void UpdateRoomState(GameRoomState state)
         {
             playerContainer.RemoveAllChildren();
+            uiRoomPlayers.Clear();
             foreach (var playerKey in state.players.Keys)
             {
                 UIRoomPlayer newRoomUI = Instantiate(playerPrefab, playerContainer);
                 newRoomUI.Player = state.players[(string)playerKey];
                 newRoomUI.Show();
+                uiRoomPlayers[(string)playerKey] = newRoomUI;
             }
         }
 
