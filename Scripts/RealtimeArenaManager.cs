@@ -11,7 +11,7 @@ namespace RealtimeArena
     {
         public static RealtimeArenaManager Instance { get; private set; }
         public static ColyseusClient Client { get; private set; }
-        public static ColyseusRoom<LobbyRoomState> CurrentLobby { get; set; }
+        public static ColyseusRoom<GameRoomState> CurrentLobby { get; set; }
 
         public string serverAddress = "ws://localhost:2567";
         public UnityEvent onJoinLobby = new UnityEvent();
@@ -36,7 +36,7 @@ namespace RealtimeArena
             Client = new ColyseusClient(serverAddress);
         }
 
-        public void OnJoinLobby(ColyseusRoom<LobbyRoomState> room)
+        public void OnJoinLobby(ColyseusRoom<GameRoomState> room)
         {
             CurrentLobby = room;
             CurrentLobby.OnError += CurrentLobby_OnError;
@@ -50,7 +50,7 @@ namespace RealtimeArena
             onLobbyError.Invoke(code, message);
         }
 
-        private void CurrentLobby_OnStateChange(LobbyRoomState state, bool isFirstState)
+        private void CurrentLobby_OnStateChange(GameRoomState state, bool isFirstState)
         {
             onLobbyStateChange.Invoke(state, isFirstState);
         }

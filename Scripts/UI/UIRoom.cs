@@ -36,7 +36,7 @@ namespace RealtimeArena.UI
 
         }
 
-        private void OnStateChange(LobbyRoomState state, bool isFirstState)
+        private void OnStateChange(GameRoomState state, bool isFirstState)
         {
             UpdateRoomState(state);
             if (state.isStarting != IsStarting)
@@ -74,7 +74,7 @@ namespace RealtimeArena.UI
 
         }
 
-        private void UpdateRoomState(LobbyRoomState state)
+        private void UpdateRoomState(GameRoomState state)
         {
             playerContainer.RemoveAllChildren();
             foreach (var playerKey in state.players.Keys)

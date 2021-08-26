@@ -22,7 +22,7 @@ namespace RealtimeArena.UI
             {
                 inputPassword.inputType = InputField.InputType.Password;
                 inputPassword.contentType = InputField.ContentType.Pin;
-                inputPassword.characterLimit = LobbyRoomConsts.MAX_PASSWORD_LENGTH;
+                inputPassword.characterLimit = GameRoomConsts.MAX_PASSWORD_LENGTH;
             }
         }
 
@@ -35,13 +35,13 @@ namespace RealtimeArena.UI
         {
             Dictionary<string, object> options = new Dictionary<string, object>();
             if (inputTitle && !string.IsNullOrEmpty(inputTitle.text))
-                options[LobbyRoomConsts.OPTION_TITLE] = inputTitle.text;
+                options[GameRoomConsts.OPTION_TITLE] = inputTitle.text;
             if (inputPassword && !string.IsNullOrEmpty(inputPassword.text))
-                options[LobbyRoomConsts.OPTION_PASSWORD] = inputPassword.text;
+                options[GameRoomConsts.OPTION_PASSWORD] = inputPassword.text;
 
             try
             {
-                ColyseusRoom<LobbyRoomState> room = await RealtimeArenaManager.Client.Create<LobbyRoomState>(LobbyRoomConsts.ROOM_NAME, options);
+                ColyseusRoom<GameRoomState> room = await RealtimeArenaManager.Client.Create<GameRoomState>(GameRoomConsts.ROOM_NAME, options);
                 RealtimeArenaManager.Instance.OnJoinLobby(room);
             }
             catch (System.Exception ex)

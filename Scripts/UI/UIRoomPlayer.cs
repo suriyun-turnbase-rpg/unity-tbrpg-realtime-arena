@@ -13,8 +13,8 @@ namespace RealtimeArena.UI
         public GameObject[] readyObjects;
         public GameObject[] notReadyObjects;
 
-        private LobbyPlayer _player;
-        public LobbyPlayer Player
+        private GamePlayer _player;
+        public GamePlayer Player
         {
             get { return _player; }
             set

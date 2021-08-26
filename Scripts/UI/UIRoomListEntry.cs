@@ -37,7 +37,7 @@ namespace RealtimeArena.UI
         {
             try
             {
-                ColyseusRoom<LobbyRoomState> room = await RealtimeArenaManager.Client.JoinById<LobbyRoomState>(RoomId);
+                ColyseusRoom<GameRoomState> room = await RealtimeArenaManager.Client.JoinById<GameRoomState>(RoomId);
                 RealtimeArenaManager.Instance.OnJoinLobby(room);
             }
             catch (System.Exception ex)

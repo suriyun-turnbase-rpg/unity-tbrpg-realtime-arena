@@ -8,7 +8,7 @@ namespace RealtimeArena.Event.Lobby
     /// [LobbyRoomState state, bool isFirstState]
     /// </summary>
     [Serializable]
-    public class LobbyStateChangeEvent : UnityEvent<LobbyRoomState, bool>
+    public class LobbyStateChangeEvent : UnityEvent<GameRoomState, bool>
     {
     }
 }

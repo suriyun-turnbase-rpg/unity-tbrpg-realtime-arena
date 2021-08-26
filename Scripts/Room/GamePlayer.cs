@@ -2,7 +2,7 @@ using Colyseus.Schema;
 
 namespace RealtimeArena.Room
 {
-	public partial class LobbyPlayer : Schema
+	public partial class GamePlayer : Schema
 	{
 		[Type(0, "string")]
 		public string playerName = default(string);
