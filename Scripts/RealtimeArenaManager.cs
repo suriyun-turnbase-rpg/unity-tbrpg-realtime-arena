@@ -69,7 +69,25 @@ namespace RealtimeArena
 
         public void LoadBattleScene(bool loadIfNotLoaded = false)
         {
+            GameInstance.Singleton.onLoadSceneFinish.RemoveListener(OnLoadBattleSceneFinish);
+            GameInstance.Singleton.onLoadSceneFinish.AddListener(OnLoadBattleSceneFinish);
             GameInstance.Singleton.LoadSceneIfNotLoaded(battleScene, loadIfNotLoaded);
+        }
+
+        private void OnLoadBattleSceneFinish(string sceneName, float progress)
+        {
+            SetPlayerEnterGameState();
+            GameInstance.Singleton.onLoadSceneFinish.RemoveListener(OnLoadBattleSceneFinish);
+        }
+
+        public async void TogglePlayerReadyState()
+        {
+            await CurrentRoom.Send("ready");
+        }
+
+        public async void SetPlayerEnterGameState()
+        {
+            await CurrentRoom.Send("enterGame");
         }
     }
 }

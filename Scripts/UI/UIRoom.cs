@@ -92,13 +92,7 @@ namespace RealtimeArena.UI
 
         public void OnClickReady()
         {
-            OnClickReadyRoutine();
-        }
-
-        private async void OnClickReadyRoutine()
-        {
-            // NOTE: If 2 players click ready it will start game.
-            await RealtimeArenaManager.CurrentRoom.Send("ready");
+            RealtimeArenaManager.Instance.TogglePlayerReadyState();
         }
     }
 }
