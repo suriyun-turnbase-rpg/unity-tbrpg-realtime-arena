@@ -4,6 +4,6 @@
     {
         None = 0,
         Ready = 1,
-        EnterGame = 2,
+        InGame = 2,
     }
 }
