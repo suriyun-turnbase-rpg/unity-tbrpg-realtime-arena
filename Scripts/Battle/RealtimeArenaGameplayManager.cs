@@ -6,7 +6,6 @@ namespace RealtimeArena.Battle
 {
     public class RealtimeArenaGameplayManager : GamePlayManager
     {
-        public GamePlayFormation CurrentTeamFormation { get; private set; }
 
         protected override void Awake()
         {
