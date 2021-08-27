@@ -20,6 +20,9 @@ namespace RealtimeArena.Room
 		public int leaderCharacterLevel = default(int);
 
 		[Type(5, "uint8")]
+		public byte team = 0;
+
+		[Type(6, "uint8")]
 		public byte state = 0;
 	}
 }
