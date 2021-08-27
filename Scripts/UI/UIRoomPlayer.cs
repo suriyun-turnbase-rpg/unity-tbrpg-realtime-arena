@@ -20,8 +20,10 @@ namespace RealtimeArena.UI
             set
             {
                 _player = value;
-                PlayerName = value.playerName;
-                PlayerLevel = value.playerLevel;
+                var player = new Player();
+                player.Exp = value.exp;
+                PlayerName = value.profileName;
+                PlayerLevel = player.Level;
                 TeamBP = value.teamBP;
                 IsReady = value.state >= (byte)EPlayerState.Ready;
             }
