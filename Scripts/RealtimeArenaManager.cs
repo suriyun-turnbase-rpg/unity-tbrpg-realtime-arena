@@ -44,7 +44,7 @@ namespace RealtimeArena
             if (options == null)
                 options = new Dictionary<string, object>();
             options[GameRoomConsts.OPTION_PLAYER_ID] = Player.CurrentPlayer.Id;
-            options[GameRoomConsts.OPTION_ACCESS_TOKEN] = Player.CurrentPlayer.LoginToken;
+            options[GameRoomConsts.OPTION_LOGIN_TOKEN] = Player.CurrentPlayer.LoginToken;
             try
             {
                 ColyseusRoom<GameRoomState> room = await Client.Create<GameRoomState>(GameRoomConsts.ROOM_NAME, options);
@@ -61,7 +61,7 @@ namespace RealtimeArena
             if (options == null)
                 options = new Dictionary<string, object>();
             options[GameRoomConsts.OPTION_PLAYER_ID] = Player.CurrentPlayer.Id;
-            options[GameRoomConsts.OPTION_ACCESS_TOKEN] = Player.CurrentPlayer.LoginToken;
+            options[GameRoomConsts.OPTION_LOGIN_TOKEN] = Player.CurrentPlayer.LoginToken;
             try
             {
                 ColyseusRoom<GameRoomState> room = await Client.JoinById<GameRoomState>(roomId, options);
