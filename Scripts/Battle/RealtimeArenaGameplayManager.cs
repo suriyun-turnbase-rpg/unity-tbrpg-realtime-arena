@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RealtimeArena.Battle
 {
@@ -20,12 +18,29 @@ namespace RealtimeArena.Battle
         {
             teamAFormation.ClearCharacters();
             teamAFormation.foeFormation = teamBFormation;
+            Debug.LogError(RealtimeArenaManager.CurrentRoom.State.players[RealtimeArenaManager.CurrentRoom.SessionId].team);
+            if (RealtimeArenaManager.CurrentRoom.State.players[RealtimeArenaManager.CurrentRoom.SessionId].team == 0)
+            {
+                teamAFormation.SetFormationCharactersForArena();
+            }
+            else
+            {
+
+            }
         }
 
         protected override void SetupTeamBFormation()
         {
             teamBFormation.ClearCharacters();
             teamBFormation.foeFormation = teamAFormation;
+            if (RealtimeArenaManager.CurrentRoom.State.players[RealtimeArenaManager.CurrentRoom.SessionId].team == 1)
+            {
+                teamBFormation.SetFormationCharactersForArena();
+            }
+            else
+            {
+
+            }
         }
 
         protected override void Start()
