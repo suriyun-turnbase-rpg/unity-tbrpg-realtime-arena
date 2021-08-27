@@ -20,12 +20,16 @@ namespace RealtimeArena.Battle
         {
             teamAFormation.ClearCharacters();
             teamAFormation.foeFormation = teamBFormation;
+            if (RealtimeArenaManager.CurrentRoom.State.players[RealtimeArenaManager.CurrentRoom.SessionId].team == 0)
+                CurrentTeamFormation = teamAFormation;
         }
 
         protected override void SetupTeamBFormation()
         {
             teamBFormation.ClearCharacters();
             teamBFormation.foeFormation = teamAFormation;
+            if (RealtimeArenaManager.CurrentRoom.State.players[RealtimeArenaManager.CurrentRoom.SessionId].team == 1)
+                CurrentTeamFormation = teamBFormation;
         }
 
         protected override void Start()
@@ -73,11 +77,6 @@ namespace RealtimeArena.Battle
         public override void OnRevive()
         {
             // Override to do nothing on revive
-        }
-
-        public override int CountDeadCharacters()
-        {
-            return CurrentTeamFormation != null ? CurrentTeamFormation.CountDeadCharacters() : 0;
         }
     }
 }
