@@ -30,20 +30,7 @@ namespace RealtimeArena.UI
             if (HasPassword)
                 uiRoomList.ShowUIRoomPassword(RoomId, RoomTitle);
             else
-                Join();
-        }
-
-        private async void Join()
-        {
-            try
-            {
-                ColyseusRoom<GameRoomState> room = await RealtimeArenaManager.Client.JoinById<GameRoomState>(RoomId);
-                RealtimeArenaManager.Instance.OnJoinLobby(room);
-            }
-            catch (System.Exception ex)
-            {
-                RealtimeArenaManager.Instance.OnJoinLobbyFailed(ex.Message);
-            }
+                RealtimeArenaManager.Instance.JoinRoom(RoomId, null);
         }
     }
 }

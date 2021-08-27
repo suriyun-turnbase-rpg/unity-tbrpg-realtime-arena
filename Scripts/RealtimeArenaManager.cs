@@ -4,6 +4,7 @@ using RealtimeArena.Room;
 using RealtimeArena.Event;
 using UnityEngine.Events;
 using LobbyEvent = RealtimeArena.Event.Lobby;
+using System.Collections.Generic;
 
 namespace RealtimeArena
 {
@@ -38,7 +39,41 @@ namespace RealtimeArena
             Client = new ColyseusClient(serverAddress);
         }
 
-        public void OnJoinLobby(ColyseusRoom<GameRoomState> room)
+        public async void CreateRoom(Dictionary<string, object> options)
+        {
+            if (options == null)
+                options = new Dictionary<string, object>();
+            options[GameRoomConsts.OPTION_PLAYER_ID] = Player.CurrentPlayer.Id;
+            options[GameRoomConsts.OPTION_ACCESS_TOKEN] = Player.CurrentPlayer.LoginToken;
+            try
+            {
+                ColyseusRoom<GameRoomState> room = await Client.Create<GameRoomState>(GameRoomConsts.ROOM_NAME, options);
+                OnJoinLobby(room);
+            }
+            catch (System.Exception ex)
+            {
+                OnJoinLobbyFailed(ex.Message);
+            }
+        }
+
+        public async void JoinRoom(string roomId, Dictionary<string, object> options)
+        {
+            if (options == null)
+                options = new Dictionary<string, object>();
+            options[GameRoomConsts.OPTION_PLAYER_ID] = Player.CurrentPlayer.Id;
+            options[GameRoomConsts.OPTION_ACCESS_TOKEN] = Player.CurrentPlayer.LoginToken;
+            try
+            {
+                ColyseusRoom<GameRoomState> room = await Client.JoinById<GameRoomState>(roomId, options);
+                OnJoinLobby(room);
+            }
+            catch (System.Exception ex)
+            {
+                OnJoinLobbyFailed(ex.Message);
+            }
+        }
+
+        private void OnJoinLobby(ColyseusRoom<GameRoomState> room)
         {
             CurrentRoom = room;
             CurrentRoom.OnError += CurrentRoom_OnError;
@@ -46,6 +81,12 @@ namespace RealtimeArena
             CurrentRoom.OnLeave += CurrentRoom_OnLeave;
             CurrentRoom.OnMessage<string>("playerLeave", CurrentRoom_OnPlayerLeave);
             onJoinLobby.Invoke();
+        }
+
+        private void OnJoinLobbyFailed(string message)
+        {
+            Debug.LogError($"Join Lobby Failed: {message}");
+            onJoinLobbyFailed.Invoke(message);
         }
 
         private void CurrentRoom_OnError(int code, string message)
@@ -68,12 +109,6 @@ namespace RealtimeArena
             onPlayerLeave.Invoke(sessionId);
         }
 
-        public void OnJoinLobbyFailed(string message)
-        {
-            Debug.LogError($"Join Lobby Failed: {message}");
-            onJoinLobbyFailed.Invoke(message);
-        }
-
         public void LoadBattleScene(bool loadIfNotLoaded = false)
         {
             GameInstance.Singleton.LoadSceneIfNotLoaded(battleScene, loadIfNotLoaded);
@@ -87,6 +122,11 @@ namespace RealtimeArena
         public async void SetPlayerEnterGameState()
         {
             await CurrentRoom.Send("enterGame");
+        }
+
+        public async void SendDoSelectedAction(string entityId, string targetEntityId, int action, int seed)
+        {
+
         }
     }
 }

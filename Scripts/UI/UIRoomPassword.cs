@@ -37,24 +37,10 @@ namespace RealtimeArena.UI
 
         public void OnClickJoin()
         {
-            Join();
-        }
-
-        private async void Join()
-        {
             Dictionary<string, object> options = new Dictionary<string, object>();
             if (inputPassword && !string.IsNullOrEmpty(inputPassword.text))
                 options[GameRoomConsts.OPTION_PASSWORD] = inputPassword.text;
-
-            try
-            {
-                ColyseusRoom<GameRoomState> room = await RealtimeArenaManager.Client.JoinById<GameRoomState>(RoomId, options);
-                RealtimeArenaManager.Instance.OnJoinLobby(room);
-            }
-            catch (System.Exception ex)
-            {
-                RealtimeArenaManager.Instance.OnJoinLobbyFailed(ex.Message);
-            }
+            RealtimeArenaManager.Instance.JoinRoom(RoomId, options);
         }
     }
 }
