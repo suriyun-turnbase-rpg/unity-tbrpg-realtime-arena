@@ -5,6 +5,7 @@ using RealtimeArena.Event;
 using UnityEngine.Events;
 using LobbyEvent = RealtimeArena.Event.Lobby;
 using System.Collections.Generic;
+using RealtimeArena.Message;
 
 namespace RealtimeArena
 {
@@ -13,6 +14,7 @@ namespace RealtimeArena
         public static RealtimeArenaManager Instance { get; private set; }
         public static ColyseusClient Client { get; private set; }
         public static ColyseusRoom<GameRoomState> CurrentRoom { get; set; }
+        public static bool IsManager { get { return CurrentRoom != null && CurrentRoom.SessionId == CurrentRoom.State.managerSessionId; } }
 
         public string serverAddress = "ws://localhost:2567";
         public string battleScene = "OnlineBattleScene";
@@ -124,9 +126,20 @@ namespace RealtimeArena
             await CurrentRoom.Send("enterGame");
         }
 
+        public async void SendUpdateActiveCharacter(string id)
+        {
+            await CurrentRoom.Send("updateActiveCharacter", id);
+        }
+
         public async void SendDoSelectedAction(string entityId, string targetEntityId, int action, int seed)
         {
-
+            await CurrentRoom.Send("doSelectedAction", new DoSelectedActionMsg()
+            {
+                entityId = entityId,
+                targetEntityId = targetEntityId,
+                action = action,
+                seed = seed,
+            });
         }
     }
 }
