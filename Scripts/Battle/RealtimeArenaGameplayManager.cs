@@ -11,6 +11,7 @@ namespace RealtimeArena.Battle
     {
         protected int loadedFormation = 0;
         protected readonly Dictionary<string, CharacterEntity> allCharacters = new Dictionary<string, CharacterEntity>();
+        protected ERoomState currentState;
 
         protected override void Awake()
         {
@@ -87,12 +88,16 @@ namespace RealtimeArena.Battle
 
         private void OnStateChange(GameRoomState state, bool isFirstState)
         {
-            switch ((ERoomState)state.state)
+            if (currentState != (ERoomState)state.state)
             {
-                case ERoomState.Battle:
-                    CurrentWave = 0;
-                    StartCoroutine(OnStartBattleRoutine());
-                    break;
+                currentState = (ERoomState)state.state;
+                switch (currentState)
+                {
+                    case ERoomState.Battle:
+                        CurrentWave = 0;
+                        StartCoroutine(OnStartBattleRoutine());
+                        break;
+                }
             }
         }
 
@@ -160,6 +165,11 @@ namespace RealtimeArena.Battle
                         ActiveCharacter.RandomAction();
                     else
                         uiCharacterActionManager.Show();
+                }
+                else if (RealtimeArenaManager.CurrentRoom.State.players.Count == 1)
+                {
+                    // Another player exit the game
+                    ActiveCharacter.RandomAction();
                 }
             }
             else
