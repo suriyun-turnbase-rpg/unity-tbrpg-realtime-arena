@@ -4,6 +4,7 @@ using RealtimeArena.Room;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace RealtimeArena.Battle
 {
@@ -226,6 +227,7 @@ namespace RealtimeArena.Battle
             }
             if (!string.IsNullOrEmpty(msg.winnerSessionId))
             {
+                isEnding = true;
                 if (msg.winnerSessionId.Equals(RealtimeArenaManager.CurrentRoom.SessionId))
                 {
                     // Show win dialog
@@ -318,7 +320,23 @@ namespace RealtimeArena.Battle
 
         public override void OnRevive()
         {
-            // Override to do nothing on revive
+            // Override to do nothing
+        }
+
+        public override void Restart()
+        {
+            // Override to do nothing
+        }
+
+        public override void Giveup(UnityAction onError)
+        {
+            RealtimeArenaManager.CurrentRoom.Leave(true).RunSynchronously();
+            GameInstance.Singleton.LoadManageScene();
+        }
+
+        public override void Revive(UnityAction onError)
+        {
+            // Override to do nothing
         }
     }
 }
