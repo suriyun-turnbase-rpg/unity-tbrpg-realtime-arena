@@ -10,9 +10,11 @@ namespace RealtimeArena.Battle
 {
     public class RealtimeArenaGameplayManager : GamePlayManager
     {
+        public float actionWaitingDuration = 10f;
         protected int loadedFormation = 0;
         protected readonly Dictionary<string, CharacterEntity> allCharacters = new Dictionary<string, CharacterEntity>();
         protected ERoomState currentState;
+        protected Coroutine waitForActionCoroutine;
 
         protected override void Awake()
         {
@@ -166,9 +168,14 @@ namespace RealtimeArena.Battle
                 if (ActiveCharacter.IsPlayerCharacter)
                 {
                     if (IsAutoPlay)
+                    {
                         ActiveCharacter.RandomAction();
+                    }
                     else
+                    {
                         uiCharacterActionManager.Show();
+                        waitForActionCoroutine = StartCoroutine(WaitForActionSelection());
+                    }
                 }
                 else if (RealtimeArenaManager.CurrentRoom.State.players.Count == 1)
                 {
@@ -182,8 +189,23 @@ namespace RealtimeArena.Battle
             }
         }
 
+        private IEnumerator WaitForActionSelection()
+        {
+            if (RealtimeArenaManager.IsManager)
+            {
+                yield return new WaitForSecondsRealtime(actionWaitingDuration);
+                // Time out, random action
+                ActiveCharacter.RandomAction();
+            }
+        }
+
         private void OnDoSelectedAction(DoSelectedActionMsg msg)
         {
+            if (waitForActionCoroutine != null)
+            {
+                StopCoroutine(waitForActionCoroutine);
+                waitForActionCoroutine = null;
+            }
             CharacterEntity character = allCharacters[msg.entityId];
             CharacterEntity target = null;
             if (!string.IsNullOrEmpty(msg.targetEntityId))
