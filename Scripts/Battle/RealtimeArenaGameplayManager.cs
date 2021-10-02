@@ -25,11 +25,13 @@ namespace RealtimeArena.Battle
             RealtimeArenaManager.CurrentRoom.OnMessage<string>("updateActiveCharacter", OnUpdateActiveCharacter);
             RealtimeArenaManager.CurrentRoom.OnMessage<DoSelectedActionMsg>("doSelectedAction", OnDoSelectedAction);
             RealtimeArenaManager.CurrentRoom.OnMessage<UpdateGameplayStateMsg>("updateGameplayState", OnUpdateGameplayState);
+            GameInstance.Singleton.onLoadSceneStart.AddListener(OnLoadSceneStart);
         }
 
         protected virtual void OnDestroy()
         {
             RealtimeArenaManager.Instance.onRoomStateChange.RemoveListener(OnStateChange);
+            GameInstance.Singleton.onLoadSceneStart.RemoveListener(OnLoadSceneStart);
         }
 
         protected override void SetupTeamAFormation()
@@ -330,13 +332,25 @@ namespace RealtimeArena.Battle
 
         public override void Giveup(UnityAction onError)
         {
-            RealtimeArenaManager.CurrentRoom.Leave(true).RunSynchronously();
             GameInstance.Singleton.LoadManageScene();
         }
 
         public override void Revive(UnityAction onError)
         {
             // Override to do nothing
+        }
+
+        public async void DisconnectFromServer()
+        {
+            await RealtimeArenaManager.CurrentRoom.Leave(true);
+        }
+
+        private void OnLoadSceneStart(string sceneName, float progress)
+        {
+            if (!sceneName.Equals(RealtimeArenaManager.Instance.battleScene))
+            {
+                DisconnectFromServer();
+            }
         }
     }
 }
