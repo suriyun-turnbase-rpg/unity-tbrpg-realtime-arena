@@ -200,7 +200,6 @@ namespace RealtimeArena.Battle
         {
             if (RealtimeArenaManager.IsManager)
             {
-                Debug.LogError("Wait " + actionWaitingDuration);
                 yield return new WaitForSecondsRealtime(actionWaitingDuration);
                 // Time out, random action
                 ActiveCharacter.RandomAction();
