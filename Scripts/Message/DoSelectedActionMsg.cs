@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace RealtimeArena.Message
+﻿namespace RealtimeArena.Message
 {
     [System.Serializable]
     public struct DoSelectedActionMsg
