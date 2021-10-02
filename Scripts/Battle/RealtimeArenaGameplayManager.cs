@@ -177,10 +177,17 @@ namespace RealtimeArena.Battle
                         waitForActionCoroutine = StartCoroutine(WaitForActionSelection());
                     }
                 }
-                else if (RealtimeArenaManager.CurrentRoom.State.players.Count == 1)
+                else
                 {
-                    // Another player exit the game
-                    ActiveCharacter.RandomAction();
+                    if (RealtimeArenaManager.CurrentRoom.State.players.Count == 1)
+                    {
+                        // Another player exit the game
+                        ActiveCharacter.RandomAction();
+                    }
+                    else
+                    {
+                        waitForActionCoroutine = StartCoroutine(WaitForActionSelection());
+                    }
                 }
             }
             else
@@ -193,6 +200,7 @@ namespace RealtimeArena.Battle
         {
             if (RealtimeArenaManager.IsManager)
             {
+                Debug.LogError("Wait " + actionWaitingDuration);
                 yield return new WaitForSecondsRealtime(actionWaitingDuration);
                 // Time out, random action
                 ActiveCharacter.RandomAction();
