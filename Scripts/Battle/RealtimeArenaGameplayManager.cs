@@ -23,6 +23,7 @@ namespace RealtimeArena.Battle
             RealtimeArenaManager.Instance.onRoomStateChange.AddListener(OnStateChange);
             RealtimeArenaManager.CurrentRoom.OnMessage<string>("updateActiveCharacter", OnUpdateActiveCharacter);
             RealtimeArenaManager.CurrentRoom.OnMessage<DoSelectedActionMsg>("doSelectedAction", OnDoSelectedAction);
+            RealtimeArenaManager.CurrentRoom.OnMessage<UpdateGameplayStateMsg>("updateGameplayState", OnUpdateGameplayState);
         }
 
         protected virtual void OnDestroy()
@@ -123,7 +124,7 @@ namespace RealtimeArena.Battle
                 return;
 
             if (ActiveCharacter != null)
-                ActiveCharacter.currentTimeCount = 0;
+                ActiveCharacter.CurrentTimeCount = 0;
 
             CharacterEntity activatingCharacter = null;
             var maxTime = int.MinValue;
@@ -134,16 +135,16 @@ namespace RealtimeArena.Battle
                     int spd = (int)character.GetTotalAttributes().spd;
                     if (spd <= 0)
                         spd = 1;
-                    character.currentTimeCount += spd;
-                    if (character.currentTimeCount > maxTime)
+                    character.CurrentTimeCount += spd;
+                    if (character.CurrentTimeCount > maxTime)
                     {
-                        maxTime = character.currentTimeCount;
+                        maxTime = character.CurrentTimeCount;
                         activatingCharacter = character;
                     }
                 }
                 else
                 {
-                    character.currentTimeCount = 0;
+                    character.CurrentTimeCount = 0;
                 }
             }
             // Broadcast activate character
@@ -192,6 +193,52 @@ namespace RealtimeArena.Battle
                 character.DoSkillAction(msg.seed);
         }
 
+        private void OnUpdateGameplayState(UpdateGameplayStateMsg msg)
+        {
+            foreach (var character in msg.characters)
+            {
+                allCharacters[character.entityId].Hp = character.currentHp;
+                allCharacters[character.entityId].CurrentTimeCount = character.currentTimeCount;
+                var skills = character.skills;
+                if (skills != null && skills.Count > 0)
+                {
+                    foreach (var skill in skills)
+                    {
+                        if (skill.index <= 0 || skill.index > allCharacters[character.entityId].Skills.Count)
+                            continue;
+                        var characterSkill = allCharacters[character.entityId].Skills[skill.index] as CharacterSkill;
+                        characterSkill.TurnsCount = skill.turnsCount;
+                        allCharacters[character.entityId].Skills[skill.index] = characterSkill;
+                    }
+                }
+                var buffs = character.buffs;
+                if (buffs != null && buffs.Count > 0)
+                {
+                    foreach (var buff in buffs)
+                    {
+                        if (!allCharacters[character.entityId].Buffs.ContainsKey(buff.id))
+                            continue;
+                        var characterBuff = allCharacters[character.entityId].Buffs[buff.id] as CharacterBuff;
+                        characterBuff.TurnsCount = buff.turnsCount;
+                        allCharacters[character.entityId].Buffs[buff.id] = characterBuff;
+                    }
+                }
+            }
+            if (!string.IsNullOrEmpty(msg.winnerSessionId))
+            {
+                if (msg.winnerSessionId.Equals(RealtimeArenaManager.CurrentRoom.SessionId))
+                {
+                    // Show win dialog
+                    uiWin.Show();
+                }
+                else
+                {
+                    // Show lose dialog
+                    uiLose.Show();
+                }
+            }
+        }
+
         public override void NotifyEndAction(CharacterEntity character)
         {
             if (!RealtimeArenaManager.IsManager)
@@ -200,23 +247,68 @@ namespace RealtimeArena.Battle
             if (character != ActiveCharacter)
                 return;
 
+            string winnerSessionId = string.Empty;
             if (!CurrentTeamFormation.IsAnyCharacterAlive())
             {
                 // Manager lose
                 ActiveCharacter = null;
-                // TODO: send game result to the server
+                foreach (var sessionId in RealtimeArenaManager.CurrentRoom.State.players.Keys)
+                {
+                    if ((string)sessionId != RealtimeArenaManager.CurrentRoom.SessionId)
+                    {
+                        winnerSessionId = (string)sessionId;
+                        break;
+                    }
+                }
             }
             else if (!CurrentTeamFormation.foeFormation.IsAnyCharacterAlive())
             {
                 // Manager win
                 ActiveCharacter = null;
-                // TODO: send game result to the server
+                winnerSessionId = RealtimeArenaManager.CurrentRoom.SessionId;
             }
             else
             {
                 // No winner yet.
                 NewTurn();
             }
+
+            // Send characters updating to server
+            var msg = new UpdateGameplayStateMsg()
+            {
+                winnerSessionId = winnerSessionId,
+                characters = new List<UpdateCharacterEntityMsg>()
+            };
+            foreach (var updatingCharacter in allCharacters)
+            {
+                var updatingSkills = new List<UpdateCharacterSkillMsg>();
+                for (int i = 0; i < updatingCharacter.Value.Skills.Count; ++i)
+                {
+                    updatingSkills.Add(new UpdateCharacterSkillMsg()
+                    {
+                        index = i,
+                        turnsCount = (updatingCharacter.Value.Skills[i] as CharacterSkill).TurnsCount,
+                    });
+                }
+                var updatingBuffs = new List<UpdateCharacterBuffMsg>();
+                foreach (var buff in updatingCharacter.Value.Buffs)
+                {
+                    updatingBuffs.Add(new UpdateCharacterBuffMsg()
+                    {
+                        id = buff.Key,
+                        turnsCount = (buff.Value as CharacterBuff).TurnsCount,
+                    });
+                }
+                msg.characters.Add(new UpdateCharacterEntityMsg()
+                {
+                    entityId = updatingCharacter.Key,
+                    currentHp = (int)updatingCharacter.Value.Hp,
+                    currentTimeCount = updatingCharacter.Value.CurrentTimeCount,
+                    skills = updatingSkills,
+                    buffs = updatingBuffs,
+                });
+            }
+            RealtimeArenaManager.Instance.SendUpdateGameplayState(msg);
         }
 
         public override void NextWave()

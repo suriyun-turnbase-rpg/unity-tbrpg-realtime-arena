@@ -131,15 +131,25 @@ namespace RealtimeArena
             await CurrentRoom.Send("updateActiveCharacter", id);
         }
 
-        public async void SendDoSelectedAction(string entityId, string targetEntityId, int action, int seed)
+        public void SendDoSelectedAction(string entityId, string targetEntityId, int action, int seed)
         {
-            await CurrentRoom.Send("doSelectedAction", new DoSelectedActionMsg()
+            SendDoSelectedAction(new DoSelectedActionMsg()
             {
                 entityId = entityId,
                 targetEntityId = targetEntityId,
                 action = action,
                 seed = seed,
             });
+        }
+
+        public async void SendDoSelectedAction(DoSelectedActionMsg msg)
+        {
+            await CurrentRoom.Send("doSelectedAction", msg);
+        }
+
+        public async void SendUpdateGameplayState(UpdateGameplayStateMsg msg)
+        {
+            await CurrentRoom.Send("updateGameplayState", msg);
         }
     }
 }
