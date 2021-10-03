@@ -10,7 +10,7 @@ namespace RealtimeArena.Battle
 {
     public class RealtimeArenaGameplayManager : GamePlayManager
     {
-        public float actionWaitingDuration = 10f;
+        public float decisionWaitingDuration = 10f;
         protected int loadedFormation = 0;
         protected readonly Dictionary<string, CharacterEntity> allCharacters = new Dictionary<string, CharacterEntity>();
         protected ERoomState currentState;
@@ -200,7 +200,7 @@ namespace RealtimeArena.Battle
         {
             if (RealtimeArenaManager.IsManager)
             {
-                yield return new WaitForSecondsRealtime(actionWaitingDuration);
+                yield return new WaitForSecondsRealtime(decisionWaitingDuration);
                 // Time out, random action
                 ActiveCharacter.RandomAction();
             }
