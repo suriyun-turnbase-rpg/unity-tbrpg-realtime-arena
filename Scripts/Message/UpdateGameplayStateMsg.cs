@@ -6,6 +6,7 @@ namespace RealtimeArena.Message
     public struct UpdateGameplayStateMsg
     {
         public string winnerSessionId;
+        public string loserSessionId;
         public List<UpdateCharacterEntityMsg> characters;
     }
 }

@@ -281,10 +281,14 @@ namespace RealtimeArena.Battle
                 return;
 
             string winnerSessionId = string.Empty;
+            string loserSessionId = string.Empty;
             if (!CurrentTeamFormation.IsAnyCharacterAlive())
             {
                 // Manager lose
                 ActiveCharacter = null;
+                // Define loser
+                loserSessionId = RealtimeArenaManager.CurrentRoom.SessionId;
+                // Find other session to define winner
                 foreach (var sessionId in RealtimeArenaManager.CurrentRoom.State.players.Keys)
                 {
                     if ((string)sessionId != RealtimeArenaManager.CurrentRoom.SessionId)
@@ -298,7 +302,17 @@ namespace RealtimeArena.Battle
             {
                 // Manager win
                 ActiveCharacter = null;
+                // Define winner
                 winnerSessionId = RealtimeArenaManager.CurrentRoom.SessionId;
+                // Find other session to define loser
+                foreach (var sessionId in RealtimeArenaManager.CurrentRoom.State.players.Keys)
+                {
+                    if ((string)sessionId != RealtimeArenaManager.CurrentRoom.SessionId)
+                    {
+                        loserSessionId = (string)sessionId;
+                        break;
+                    }
+                }
             }
             else
             {
@@ -310,6 +324,7 @@ namespace RealtimeArena.Battle
             var msg = new UpdateGameplayStateMsg()
             {
                 winnerSessionId = winnerSessionId,
+                loserSessionId = loserSessionId,
                 characters = new List<UpdateCharacterEntityMsg>()
             };
             foreach (var updatingCharacter in allCharacters)
