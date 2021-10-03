@@ -98,5 +98,10 @@ namespace RealtimeArena.UI
         {
             RealtimeArenaManager.Instance.TogglePlayerReadyState();
         }
+
+        public void OnClickLeave()
+        {
+            RealtimeArenaManager.Instance.LeaveFromTheRoom();
+        }
     }
 }
