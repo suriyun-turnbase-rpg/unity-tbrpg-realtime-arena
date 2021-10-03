@@ -1,5 +1,4 @@
-﻿using Colyseus;
-using RealtimeArena.Room;
+﻿using RealtimeArena.Room;
 using System.Collections.Generic;
 using UnityEngine.UI;
 

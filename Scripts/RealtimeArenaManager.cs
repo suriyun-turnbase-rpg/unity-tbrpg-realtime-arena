@@ -18,10 +18,10 @@ namespace RealtimeArena
 
         public string serverAddress = "ws://localhost:2567";
         public string battleScene = "OnlineBattleScene";
-        public UnityEvent onJoinLobby = new UnityEvent();
-        public StringEvent onJoinLobbyFailed = new StringEvent();
+        public UnityEvent onJoinRoom = new UnityEvent();
+        public StringEvent onJoinRoomFailed = new StringEvent();
         public RoomErrorEvent onRoomError = new RoomErrorEvent();
-        public RoomLeaveEvent onRoomLeave = new RoomLeaveEvent();
+        public RoomLeaveEvent onLeaveRoom = new RoomLeaveEvent();
         public StringEvent onPlayerLeave = new StringEvent();
         public LobbyEvent.LobbyStateChangeEvent onRoomStateChange = new LobbyEvent.LobbyStateChangeEvent();
 
@@ -61,11 +61,11 @@ namespace RealtimeArena
             try
             {
                 ColyseusRoom<GameRoomState> room = await Client.Create<GameRoomState>(GameRoomConsts.ROOM_NAME, options);
-                OnJoinLobby(room);
+                OnJoinRoom(room);
             }
             catch (System.Exception ex)
             {
-                OnJoinLobbyFailed(ex.Message);
+                OnJoinRoomFailed(ex.Message);
             }
         }
 
@@ -78,28 +78,28 @@ namespace RealtimeArena
             try
             {
                 ColyseusRoom<GameRoomState> room = await Client.JoinById<GameRoomState>(roomId, options);
-                OnJoinLobby(room);
+                OnJoinRoom(room);
             }
             catch (System.Exception ex)
             {
-                OnJoinLobbyFailed(ex.Message);
+                OnJoinRoomFailed(ex.Message);
             }
         }
 
-        private void OnJoinLobby(ColyseusRoom<GameRoomState> room)
+        private void OnJoinRoom(ColyseusRoom<GameRoomState> room)
         {
             CurrentRoom = room;
             CurrentRoom.OnError += CurrentRoom_OnError;
             CurrentRoom.OnStateChange += CurrentRoom_OnStateChange;
             CurrentRoom.OnLeave += CurrentRoom_OnLeave;
             CurrentRoom.OnMessage<string>("playerLeave", CurrentRoom_OnPlayerLeave);
-            onJoinLobby.Invoke();
+            onJoinRoom.Invoke();
         }
 
-        private void OnJoinLobbyFailed(string message)
+        private void OnJoinRoomFailed(string message)
         {
             Debug.LogError($"Join Lobby Failed: {message}");
-            onJoinLobbyFailed.Invoke(message);
+            onJoinRoomFailed.Invoke(message);
         }
 
         private void CurrentRoom_OnError(int code, string message)
@@ -114,7 +114,7 @@ namespace RealtimeArena
 
         private void CurrentRoom_OnLeave(int code)
         {
-            onRoomLeave.Invoke(code);
+            onLeaveRoom.Invoke(code);
             CurrentRoom = null;
         }
 

@@ -11,14 +11,14 @@ namespace RealtimeArena.UI
         {
             uiRoom.Hide();
             uiRoomList.Show();
-            RealtimeArenaManager.Instance.onJoinLobby.AddListener(OnJoin);
-            RealtimeArenaManager.Instance.onRoomLeave.AddListener(OnLeave);
+            RealtimeArenaManager.Instance.onJoinRoom.AddListener(OnJoin);
+            RealtimeArenaManager.Instance.onLeaveRoom.AddListener(OnLeave);
         }
 
         private void OnDestroy()
         {
-            RealtimeArenaManager.Instance.onJoinLobby.RemoveListener(OnJoin);
-            RealtimeArenaManager.Instance.onRoomLeave.RemoveListener(OnLeave);
+            RealtimeArenaManager.Instance.onJoinRoom.RemoveListener(OnJoin);
+            RealtimeArenaManager.Instance.onLeaveRoom.RemoveListener(OnLeave);
         }
 
         private void OnJoin()

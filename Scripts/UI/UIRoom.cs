@@ -22,7 +22,7 @@ namespace RealtimeArena.UI
                 textCountDown.text = string.Empty;
             RealtimeArenaManager.Instance.onRoomError.AddListener(OnError);
             RealtimeArenaManager.Instance.onRoomStateChange.AddListener(OnStateChange);
-            RealtimeArenaManager.Instance.onRoomLeave.AddListener(OnLeave);
+            RealtimeArenaManager.Instance.onLeaveRoom.AddListener(OnLeave);
             UpdateRoomState(RealtimeArenaManager.CurrentRoom.State);
         }
 
@@ -30,7 +30,7 @@ namespace RealtimeArena.UI
         {
             RealtimeArenaManager.Instance.onRoomError.RemoveListener(OnError);
             RealtimeArenaManager.Instance.onRoomStateChange.RemoveListener(OnStateChange);
-            RealtimeArenaManager.Instance.onRoomLeave.RemoveListener(OnLeave);
+            RealtimeArenaManager.Instance.onLeaveRoom.RemoveListener(OnLeave);
         }
 
         private void OnError(int code, string message)
