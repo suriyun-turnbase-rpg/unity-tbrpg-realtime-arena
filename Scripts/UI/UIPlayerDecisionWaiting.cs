@@ -31,9 +31,9 @@ namespace RealtimeArena.UI
                 return;
             }
 
-            if (dirtyIsActiveCharacter != uiCharacterStats.character.IsActiveCharacter)
+            if (dirtyIsActiveCharacter != (uiCharacterStats.character.IsActiveCharacter && manager.WaitingForAction))
             {
-                dirtyIsActiveCharacter = uiCharacterStats.character.IsActiveCharacter;
+                dirtyIsActiveCharacter = (uiCharacterStats.character.IsActiveCharacter && manager.WaitingForAction);
                 StartCountDown();
             }
 
