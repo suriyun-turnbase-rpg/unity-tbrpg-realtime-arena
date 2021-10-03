@@ -3160,9 +3160,10 @@ MonoBehaviour:
   beforeMoveToNextWaveDelay: 2
   moveToNextWaveDelay: 1
   uiCharacterStatsContainer: {fileID: 2022771699}
-  uiCharacterStatsPrefab: {fileID: 114825013801312584, guid: 5a0e6475b35fbe84bb59e3a1129f3da0,
+  uiCharacterStatsPrefab: {fileID: 114825013801312584, guid: cd2d5756b0d126a44a9b94fc80edf791,
     type: 3}
   uiCharacterActionManager: {fileID: 1447221952}
+  actionWaitingDuration: 10
 --- !u!4 &1019725147
 Transform:
   m_ObjectHideFlags: 0
