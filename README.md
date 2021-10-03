@@ -17,14 +17,10 @@ Realtime multiplayer game mode for Turnbase RPG template
 - Clients tells server that the battle scene is loaded and ready to play
 - Server random and set game-manager client
 - Game start, game-manager client will find the first turn is for the client who own character which has highest speed stats
-- Player has a fewest time to decision to attack or use skills
+- Player has a few time to decision to attack or use skills
 - When player decided, game-manager client will simulate character action and broadcast result to all clients
-- Game will ends when any side leave the game or all characters are dead
+- When any side leave the game all characters from that side will random an actions
 - When the battle end, server may tell game-service to record it for rewarding later
-
-## Note
-- Must add some rule such as: each player have limited duration to make decision
-- Have to think about whats to do when player exit or disconnect during the battle
 
 ## Getting Started
 - Setup [the server](https://github.com/insthync/tbrpg-realtime-arena-server)
