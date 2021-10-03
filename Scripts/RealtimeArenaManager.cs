@@ -43,10 +43,10 @@ namespace RealtimeArena
 
         private void OnApplicationQuit()
         {
-            DisconnectFromServer();
+            LeaveFromTheRoom();
         }
 
-        public async void DisconnectFromServer()
+        public async void LeaveFromTheRoom()
         {
             if (CurrentRoom != null)
                 await CurrentRoom.Leave(true);

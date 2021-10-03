@@ -390,7 +390,7 @@ namespace RealtimeArena.Battle
         {
             if (!sceneName.Equals(RealtimeArenaManager.Instance.battleScene))
             {
-                RealtimeArenaManager.Instance.DisconnectFromServer();
+                RealtimeArenaManager.Instance.LeaveFromTheRoom();
             }
         }
     }
