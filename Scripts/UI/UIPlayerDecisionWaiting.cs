@@ -31,9 +31,6 @@ namespace RealtimeArena.UI
                 return;
             }
 
-            if (rootContainer)
-                rootContainer.SetActive(uiCharacterStats.character.IsActiveCharacter);
-
             if (dirtyIsActiveCharacter != uiCharacterStats.character.IsActiveCharacter)
             {
                 dirtyIsActiveCharacter = uiCharacterStats.character.IsActiveCharacter;
@@ -51,6 +48,9 @@ namespace RealtimeArena.UI
 
             if (imageCountDownGage != null)
                 imageCountDownGage.fillAmount = rate;
+
+            if (rootContainer)
+                rootContainer.SetActive(uiCharacterStats.character.IsActiveCharacter && countDown > 0f && manager.WaitingForAction);
         }
 
         public void StartCountDown()

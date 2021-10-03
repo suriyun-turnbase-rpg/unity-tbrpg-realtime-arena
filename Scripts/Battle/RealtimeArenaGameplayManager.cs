@@ -15,6 +15,10 @@ namespace RealtimeArena.Battle
         protected readonly Dictionary<string, CharacterEntity> allCharacters = new Dictionary<string, CharacterEntity>();
         protected ERoomState currentState;
         protected Coroutine waitForActionCoroutine;
+        public bool WaitingForAction
+        {
+            get { return waitForActionCoroutine != null; }
+        }
 
         protected override void Awake()
         {
@@ -198,12 +202,10 @@ namespace RealtimeArena.Battle
 
         private IEnumerator WaitForActionSelection()
         {
+            yield return new WaitForSecondsRealtime(decisionWaitingDuration);
+            // Time out, random action
             if (RealtimeArenaManager.IsManager)
-            {
-                yield return new WaitForSecondsRealtime(decisionWaitingDuration);
-                // Time out, random action
                 ActiveCharacter.RandomAction();
-            }
         }
 
         private void OnDoSelectedAction(DoSelectedActionMsg msg)
