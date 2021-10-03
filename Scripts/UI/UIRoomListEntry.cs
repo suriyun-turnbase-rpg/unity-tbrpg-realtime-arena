@@ -1,6 +1,4 @@
-﻿using Colyseus;
-using RealtimeArena.Room;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 
 namespace RealtimeArena.UI
 {
