@@ -10,7 +10,7 @@ namespace RealtimeArena.UI
         public Transform entryContainer;
         public UIRoomPassword uiRoomPassword;
 
-        private void Start()
+        private void OnEnable()
         {
             LoadAvailableLobby(1000);
         }
