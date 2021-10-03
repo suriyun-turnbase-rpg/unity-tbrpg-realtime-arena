@@ -3,7 +3,6 @@ using Colyseus;
 using RealtimeArena.Room;
 using RealtimeArena.Event;
 using UnityEngine.Events;
-using LobbyEvent = RealtimeArena.Event.Lobby;
 using System.Collections.Generic;
 using RealtimeArena.Message;
 
@@ -23,7 +22,7 @@ namespace RealtimeArena
         public RoomErrorEvent onRoomError = new RoomErrorEvent();
         public RoomLeaveEvent onLeaveRoom = new RoomLeaveEvent();
         public StringEvent onPlayerLeave = new StringEvent();
-        public LobbyEvent.LobbyStateChangeEvent onRoomStateChange = new LobbyEvent.LobbyStateChangeEvent();
+        public RoomStateChangeEvent onRoomStateChange = new RoomStateChangeEvent();
 
         private void Awake()
         {
