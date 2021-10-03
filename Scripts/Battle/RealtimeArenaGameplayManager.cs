@@ -258,7 +258,7 @@ namespace RealtimeArena.Battle
                     }
                 }
             }
-            if (!string.IsNullOrEmpty(msg.winnerSessionId))
+            if (!string.IsNullOrEmpty(msg.winnerSessionId) || !string.IsNullOrEmpty(msg.loserSessionId))
             {
                 isEnding = true;
                 if (msg.winnerSessionId.Equals(RealtimeArenaManager.CurrentRoom.SessionId))
@@ -386,16 +386,11 @@ namespace RealtimeArena.Battle
             // Override to do nothing
         }
 
-        public async void DisconnectFromServer()
-        {
-            await RealtimeArenaManager.CurrentRoom.Leave(true);
-        }
-
         private void OnLoadSceneStart(string sceneName, float progress)
         {
             if (!sceneName.Equals(RealtimeArenaManager.Instance.battleScene))
             {
-                DisconnectFromServer();
+                RealtimeArenaManager.Instance.DisconnectFromServer();
             }
         }
     }

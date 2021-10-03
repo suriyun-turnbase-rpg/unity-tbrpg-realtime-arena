@@ -41,6 +41,17 @@ namespace RealtimeArena
             Client = new ColyseusClient(serverAddress);
         }
 
+        private void OnApplicationQuit()
+        {
+            DisconnectFromServer();
+        }
+
+        public async void DisconnectFromServer()
+        {
+            if (CurrentRoom != null)
+                await CurrentRoom.Leave(true);
+        }
+
         public async void CreateRoom(Dictionary<string, object> options)
         {
             if (options == null)
@@ -104,6 +115,7 @@ namespace RealtimeArena
         private void CurrentRoom_OnLeave(int code)
         {
             onRoomLeave.Invoke(code);
+            CurrentRoom = null;
         }
 
         private void CurrentRoom_OnPlayerLeave(string sessionId)
