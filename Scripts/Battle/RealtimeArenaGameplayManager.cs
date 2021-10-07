@@ -131,33 +131,9 @@ namespace RealtimeArena.Battle
         {
             if (!RealtimeArenaManager.IsManager)
                 return;
-
-            if (ActiveCharacter != null)
-                ActiveCharacter.CurrentTimeCount = 0;
-
-            CharacterEntity activatingCharacter = null;
-            var maxTime = int.MinValue;
-            foreach (var character in allCharacters.Values)
-            {
-                if (character.Hp > 0)
-                {
-                    int spd = (int)character.GetTotalAttributes().spd;
-                    if (spd <= 0)
-                        spd = 1;
-                    character.CurrentTimeCount += spd;
-                    if (character.CurrentTimeCount > maxTime)
-                    {
-                        maxTime = character.CurrentTimeCount;
-                        activatingCharacter = character;
-                    }
-                }
-                else
-                {
-                    character.CurrentTimeCount = 0;
-                }
-            }
+            UpdateActivatingCharacter();
             // Broadcast activate character
-            RealtimeArenaManager.Instance.SendUpdateActiveCharacter(activatingCharacter.Item.Id);
+            RealtimeArenaManager.Instance.SendUpdateActiveCharacter(ActiveCharacter.Item.Id);
         }
 
         private void OnUpdateActiveCharacter(string id)
