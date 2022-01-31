@@ -1,0 +1,19 @@
+{
+    "name": "RealtimeArena",
+    "rootNamespace": "",
+    "references": [
+        "UIUtilities",
+        "BaseRPG",
+        "TurnbaseRPG",
+        "LucidSight.Runtime.ColyseusSDK"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
