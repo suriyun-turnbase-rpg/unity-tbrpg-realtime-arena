@@ -142,40 +142,41 @@ namespace RealtimeArena.Battle
             ActiveCharacter.DecreaseBuffsTurn();
             ActiveCharacter.DecreaseSkillsTurn();
             ActiveCharacter.ResetStates();
-            if (ActiveCharacter.Hp <= 0 || ActiveCharacter.IsStun)
+            if (ActiveCharacter.Hp > 0 && !ActiveCharacter.IsStun)
             {
-                ActiveCharacter.NotifyEndAction();
-                return;
-            }
-            if (ActiveCharacter.IsPlayerCharacter)
-            {
-                if (ActiveCharacter.IsProvoked)
+                if (ActiveCharacter.IsPlayerCharacter)
                 {
-                    ActiveCharacter.DoProvokedAction();
+                    if (ActiveCharacter.IsProvoked)
+                    {
+                        ActiveCharacter.DoProvokedAction();
+                        return;
+                    }
+                    if (IsAutoPlay)
+                    {
+                        ActiveCharacter.RandomAction();
+                    }
+                    else
+                    {
+                        uiCharacterActionManager.Show();
+                        waitForActionCoroutine = StartCoroutine(WaitForActionSelection());
+                    }
                     return;
                 }
-                if (IsAutoPlay)
-                {
-                    ActiveCharacter.RandomAction();
-                }
                 else
                 {
-                    uiCharacterActionManager.Show();
-                    waitForActionCoroutine = StartCoroutine(WaitForActionSelection());
+                    if (RealtimeArenaManager.CurrentRoom.State.players.Count == 1)
+                    {
+                        // Another player exit the game
+                        ActiveCharacter.RandomAction();
+                    }
+                    else
+                    {
+                        waitForActionCoroutine = StartCoroutine(WaitForActionSelection());
+                    }
+                    return;
                 }
             }
-            else
-            {
-                if (RealtimeArenaManager.CurrentRoom.State.players.Count == 1)
-                {
-                    // Another player exit the game
-                    ActiveCharacter.RandomAction();
-                }
-                else
-                {
-                    waitForActionCoroutine = StartCoroutine(WaitForActionSelection());
-                }
-            }
+            ActiveCharacter.NotifyEndAction();
         }
 
         private IEnumerator WaitForActionSelection()
