@@ -200,7 +200,7 @@ namespace RealtimeArena.Battle
             character.Action = msg.action;
             character.ActionTarget = target;
             if (character.Action == CharacterEntity.ACTION_ATTACK)
-                character.DoAttackAction(msg.seed);
+                character.DoAttackAction(msg.seed, false);
             else
                 character.DoSkillAction(msg.seed);
         }
